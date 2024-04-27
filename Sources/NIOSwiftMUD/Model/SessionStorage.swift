@@ -13,30 +13,30 @@ final class SessionStorage {
     static private var lock = NSLock()
     
     static func replaceOrStoreSessionSync(_ session: Session) {
-        lock.withLock {
-            if let existingSessionIndex = sessions.firstIndex(where: { $0.id == session.id }) {
-                sessions[existingSessionIndex] = session
-            } else {
-                sessions.append(session)
-            }
+        lock.lock()
+        if let existingSessionIndex = sessions.firstIndex(where: { $0.id == session.id }) {
+            sessions[existingSessionIndex] = session
+        } else {
+            sessions.append(session)
         }
+        lock.unlock()
     }
     
     static func first(where predicate: (Session) throws -> Bool) -> Session? {
-        lock.withLock {
-            let result = try? sessions.first(where: predicate)
-            return result
-        }
+        lock.lock()
+        let result = try? sessions.first(where: predicate)
+        lock.unlock()
+        return result
     }
     
     static func deleteSession(_ session: Session) {
-        lock.withLock { 
-            if  let existingSessionIndex = sessions.firstIndex(where: {$0.id == session.id }) {
-                sessions.remove(at: existingSessionIndex)
-                print("Succesfully deleted session: \(session)")
-            } else {
-                print("Could not find session \(session)")
-            }
+        lock.lock()
+        if  let existingSessionIndex = sessions.firstIndex(where: {$0.id == session.id }) {
+            sessions.remove(at: existingSessionIndex)
+            print("Succesfully deleted session: \(session)")
+        } else {
+            print("Could not find session \(session)")
         }
+        lock.unlock()
     }
 }
