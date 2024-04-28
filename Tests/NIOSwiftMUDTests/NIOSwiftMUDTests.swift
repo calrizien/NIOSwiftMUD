@@ -57,7 +57,7 @@ final class NIOSwiftMUDTests: XCTestCase {
         let group = DispatchGroup()
         let queue = DispatchQueue(label: "com.nioswiftmud.test", attributes: .concurrent)
         let count = 1000
-        for i in 0..<count {
+        for _ in 0 ..< count {
             group.enter()
             queue.async {
                 SessionStorage.replaceOrStoreSessionSync(TestSession(id: UUID()))
