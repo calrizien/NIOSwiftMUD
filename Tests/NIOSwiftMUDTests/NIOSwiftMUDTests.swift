@@ -65,6 +65,9 @@ final class NIOSwiftMUDTests: XCTestCase {
             }
         }
         group.wait()
+
+        // we can't do an equality comparison because other tests might also add sessions to Session Storage.
+        // but we should have at least as much as count.
         XCTAssertGreaterThanOrEqual(SessionStorage.sessionCount(), count)
     }
 }
