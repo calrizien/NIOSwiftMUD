@@ -39,4 +39,11 @@ final class SessionStorage {
         }
         lock.unlock()
     }
+
+    static func sessionCount() -> Int {
+        lock.lock()
+        let count = sessions.count
+        lock.unlock()
+        return count
+    }
 }

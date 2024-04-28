@@ -1,5 +1,6 @@
 import XCTest
 import class Foundation.Bundle
+@testable import NIOSwiftMUD
 
 final class NIOSwiftMUDTests: XCTestCase {
 //    func testExample() throws {
@@ -44,4 +45,26 @@ final class NIOSwiftMUDTests: XCTestCase {
 //        return Bundle.main.bundleURL
 //      #endif
 //    }
+
+    func test_SessionStorage_isThreadSafe() {
+        struct TestSession: Session { 
+            let id: UUID
+            var playerID: UUID?
+            var shouldClose = false
+            var currentString = ""
+        }
+
+        let group = DispatchGroup()
+        let queue = DispatchQueue(label: "com.nioswiftmud.test", attributes: .concurrent)
+        let count = 1000
+        for i in 0..<count {
+            group.enter()
+            queue.async {
+                SessionStorage.replaceOrStoreSessionSync(TestSession(id: UUID()))
+                group.leave()
+            }
+        }
+        group.wait()
+        XCTAssertGreaterThanOrEqual(SessionStorage.sessionCount(), count)
+    }
 }
