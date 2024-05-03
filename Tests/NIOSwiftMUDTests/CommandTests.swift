@@ -499,9 +499,6 @@ class CommandTests: XCTestCase {
     }
 
     func test_WhisperCommand_returnsFunnyMessage_when_YouTargetYourself() async {
-        // Lots of setup needed: create three users, including sessions
-        
-        // testuser1
         var session = MockSession()
         let testusername = "Testuser_\(UUID())"
         var testuser = User(username: testusername, password: "password")
