@@ -1,6 +1,6 @@
 struct WhisperCommand: MudCommand {
     static let token: String = "whisper"
-    static let expectedArgumentCount = 3
+    static let expectedArgumentCount = 2
     static let requiresLogin = true
     
     let session: Session
